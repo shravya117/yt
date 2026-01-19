@@ -1,4 +1,4 @@
- All Prompts Used in YouTube Smart Assist
+All Prompts Used in YouTube Smart Assist
 
 > **Project**: YouTube Smart Assist - AI-Powered Creator Dashboard  
 > **Generated**: 2026-01-19  
@@ -22,6 +22,7 @@
 ## Core Prompt Strategy
 
 ### Principles
+
 1. **Context First**: Always include user's niche, goal, and preferences
 2. **Structured Output**: Request JSON when possible for parsing
 3. **Actionable**: Focus on practical, implementable suggestions
@@ -29,6 +30,7 @@
 5. **Iterative**: Allow refinement and follow-up questions
 
 ### Temperature Settings
+
 - **Ideas Generation**: 0.8 (more creative for diverse ideas)
 - **Description/Title/Hashtags**: 0.7 (balanced creativity and consistency)
 - **Analysis**: 0.5 (more analytical, less creative)
@@ -39,6 +41,7 @@
 ## System Instructions
 
 ### 1. YouTube Content Generation System Instruction
+
 **Location**: `lib/gemini-service.js` - `generateYouTubeContent()`
 
 ```
@@ -50,6 +53,7 @@ You are an expert YouTube growth consultant. Provide direct answers only - no ac
 ---
 
 ### 2. Chatbot System Instruction
+
 **Location**: `app/api/creator/chatbot/route.js`
 
 ```
@@ -60,12 +64,14 @@ Be conversational, helpful, and actionable. Keep responses concise but informati
 ```
 
 **Variables**:
+
 - `{niche}`: User's content niche (e.g., "technology", "education", "gaming")
 - `{goal}`: User's primary goal (e.g., "engagement", "growth", "monetization")
 
 ---
 
 ### 3. Analytics Expert System Instruction
+
 **Location**: `app/api/creator/analyze-niche-content/route.js`
 
 ```
@@ -77,6 +83,7 @@ You are a YouTube analytics expert. Analyze content patterns and provide direct 
 ## Content Generation Prompts
 
 ### 1. Description Generation Prompt
+
 **Location**: `lib/gemini-service.js` - `buildDescriptionPrompt()`
 
 ```
@@ -106,6 +113,7 @@ Provide the description directly:
 ```
 
 **Variables**:
+
 - `{title}`: Video title
 - `{niche}`: User's niche
 - `{goal}`: User's goal
@@ -118,6 +126,7 @@ Provide the description directly:
 ---
 
 ### 2. Title Generation Prompt
+
 **Location**: `lib/gemini-service.js` - `buildTitlePrompt()`
 
 ```
@@ -142,6 +151,7 @@ Format as JSON array with fields: title, seoScore (1-100), engagementScore (1-10
 ```
 
 **Variables**:
+
 - `{topic}`: Video topic
 - `{niche}`: User's niche
 - `{goal}`: User's goal
@@ -149,6 +159,7 @@ Format as JSON array with fields: title, seoScore (1-100), engagementScore (1-10
 - `{keywords}`: Optional high-performing keywords
 
 **Output Format**:
+
 ```json
 [
   {
@@ -163,6 +174,7 @@ Format as JSON array with fields: title, seoScore (1-100), engagementScore (1-10
 ---
 
 ### 3. Hashtags Generation Prompt
+
 **Location**: `lib/gemini-service.js` - `buildHashtagsPrompt()`
 
 ```
@@ -183,12 +195,14 @@ Format as JSON with fields: primary (array), secondary (array), trending (array)
 ```
 
 **Variables**:
+
 - `{topic}`: Video topic
 - `{title}`: Video title
 - `{niche}`: User's niche
 - `{hashtagStrategies}`: Optional successful hashtag strategies
 
 **Output Format**:
+
 ```json
 {
   "primary": ["#JavaScript", "#WebDevelopment", "#Coding"],
@@ -201,6 +215,7 @@ Format as JSON with fields: primary (array), secondary (array), trending (array)
 ---
 
 ### 4. Content Ideas Generation Prompt
+
 **Location**: `lib/gemini-service.js` - `buildIdeasPrompt()`
 
 ```
@@ -223,12 +238,14 @@ Format as JSON array with fields: title, description, hashtags, engagementScore,
 ```
 
 **Variables**:
+
 - `{count}`: Number of ideas to generate (default: 10)
 - `{niche}`: User's niche
 - `{goal}`: User's goal
 - `{averageEngagement}`: Current channel performance
 
 **Output Format**:
+
 ```json
 [
   {
@@ -238,7 +255,11 @@ Format as JSON array with fields: title, description, hashtags, engagementScore,
     "engagementScore": 85,
     "viewsPotential": "high",
     "whyItWorks": "List format with specific number creates curiosity",
-    "implementationTips": ["Create visual examples", "Use code snippets", "Add timestamps"]
+    "implementationTips": [
+      "Create visual examples",
+      "Use code snippets",
+      "Add timestamps"
+    ]
   }
 ]
 ```
@@ -246,6 +267,7 @@ Format as JSON array with fields: title, description, hashtags, engagementScore,
 ---
 
 ### 5. Channel/Video Analysis Prompt
+
 **Location**: `lib/gemini-service.js` - `buildAnalysisPrompt()`
 
 ```
@@ -270,6 +292,7 @@ Be specific with numbers, percentages, and concrete examples.
 ```
 
 **Variables**:
+
 - `{niche}`: User's niche
 - `{averageViews}`: Average video views
 - `{averageEngagement}`: Average engagement rate
@@ -283,6 +306,7 @@ Be specific with numbers, percentages, and concrete examples.
 ## Chatbot Prompts
 
 ### 1. Main Chatbot Conversation Prompt
+
 **Location**: `app/api/creator/chatbot/route.js`
 
 ```
@@ -295,16 +319,19 @@ User message: {message}
 ```
 
 **Variables**:
+
 - `{niche}`: User's content niche
 - `{goal}`: User's primary goal
 - `{message}`: Current user message
 
 **Features**:
+
 - Maintains conversation history (last 5 messages)
 - Provides contextual suggestions based on message content
 - Generates follow-up action suggestions
 
 **Suggestion Logic**:
+
 - If message contains "description" → Suggests: "Update video descriptions", "Analyze top performing descriptions"
 - If message contains "hashtag" → Suggests: "Generate hashtags", "Research trending tags"
 - If message contains "idea" → Suggests: "Generate content ideas", "Browse idea templates"
@@ -314,35 +341,55 @@ User message: {message}
 ---
 
 ### 2. Deep Chatbot with System Instruction
+
 **Location**: `PROMPT_STRATEGY.md` - Template
 
 ```
 You are Samvaa, an AI assistant helping YouTube creators grow their channels.
 
-Creator Profile:
+CREATOR PROFILE:
 - Niche: {niche}
 - Goal: {goal}
 - Preferred Language: {language}
 - Channel Focus: {channelFocus}
+- Average engagement: {avgEngagement}%
+- Average views: {avgViews}
 
-Your capabilities:
-1. Generate content ideas
-2. Create optimized descriptions
-3. Suggest hashtags
-4. Provide optimization tips
-5. Explain YouTube best practices
-6. Help with automation workflows
+YOUR CAPABILITIES:
+You think like a YouTube growth strategist.
+You analyze what’s working in the creator’s niche, interpret their real channel data,
+and give specific, actionable recommendations.
 
-Your personality:
-- Helpful and encouraging
-- Actionable and specific
-- Conversational but professional
-- Proactive in suggesting improvements
+You can:
+1. Generate content ideas based on proven patterns
+2. Create optimized titles, descriptions, and hashtags
+3. Analyze channel performance and identify improvement opportunities
+4. Explain YouTube best practices with concrete examples
+5. Help design automation workflows
+6. Search the web for current YouTube trends and algorithm updates when available
 
-Always consider the creator's niche and goal when providing advice.
+
+YOUR COMMUNICATION STYLE:
+- Concise: 2–4 sentences for simple questions, up to 2 short paragraphs for complex topics
+- Specific: Reference real channel data when relevant
+- Action-oriented: Provide a clear next step or suggestion
+- Casual but professional: Use up to 2 emojis max
+- Ask before assuming: If unclear, ask 1–2 clarifying questions
+
+IMPORTANT BEHAVIORS:
+- Use real channel data whenever available
+- Be honest, even if feedback is uncomfortable
+- Build on prior conversation context
+- Never invent statistics or predictions
+- Never suggest tactics that violate YouTube policies
+- Never give generic advice when specific insights are possible
+
+If an idea is weak or misaligned, explain why and suggest a better option.
+
 ```
 
 **Variables**:
+
 - `{niche}`: User's niche
 - `{goal}`: User's goal
 - `{language}`: Preferred language
@@ -353,6 +400,7 @@ Always consider the creator's niche and goal when providing advice.
 ## Analysis Prompts
 
 ### 1. Niche Content Analysis Prompt
+
 **Location**: `app/api/creator/analyze-niche-content/route.js`
 
 ```
@@ -379,10 +427,12 @@ Provide direct insights only - no acknowledgments.
 ```
 
 **Variables**:
+
 - `{niche}`: Content niche to analyze
 - `{topic}`: Specific topic within the niche
 
 **Output Format**:
+
 ```json
 {
   "titlePatterns": [
@@ -398,10 +448,7 @@ Provide direct insights only - no acknowledgments.
     "Include trending topic hashtags"
   ],
   "keywords": ["tutorial", "beginner", "step-by-step"],
-  "hooks": [
-    "Start with a surprising statistic",
-    "Ask a relatable question"
-  ],
+  "hooks": ["Start with a surprising statistic", "Ask a relatable question"],
   "insights": "Educational content performs best with clear structure and actionable takeaways"
 }
 ```
@@ -411,6 +458,7 @@ Provide direct insights only - no acknowledgments.
 ## Comment Reply Prompts
 
 ### 1. Smart Reply Generation Prompt
+
 **Location**: `lib/gemini.js` - `generateSmartReply()`
 
 ```
@@ -444,6 +492,7 @@ Generate a single, natural reply:
 ```
 
 **Variables**:
+
 - `{videoTitle}`: Title of the video
 - `{channelName}`: Name of the channel
 - `{commentText}`: The comment to reply to
@@ -453,6 +502,7 @@ Generate a single, natural reply:
 - `{channelFocus}`: Channel focus description
 
 **Configuration**:
+
 - Temperature: 0.8 (conversational)
 - Max Output Tokens: 150
 - Top K: 50
@@ -465,10 +515,11 @@ Generate a single, natural reply:
 ---
 
 ### 2. Simplified Smart Reply (Service Version)
+
 **Location**: `lib/gemini-service.js` - `generateSmartReply()`
 
 ```
-Generate a friendly, engaging reply to this YouTube comment.
+Reply to this YouTube comment as the creator.
 
 Video Title: "{videoTitle}"
 Channel: "{channelName}"
@@ -478,22 +529,26 @@ Creator Niche: {niche}
 Guidelines:
 - Keep under 120 characters
 - Be friendly and engaging
+- Sound like a real person, not a brand or assistant
 - Answer questions helpfully
 - Thank for praise
 - Be diplomatic with criticism
-- Use emojis sparingly
-- Match the comment's tone
+-  Use emojis only if they genuinely fit the tone; otherwise, do not use any
+-It is okay to respond without emojis
+- Match the intent of the comment (question, praise, feedback, criticism)
 
 Generate a single, natural reply:
 ```
 
 **Variables**:
+
 - `{videoTitle}`: Title of the video
 - `{channelName}`: Name of the channel
 - `{commentText}`: The comment to reply to
 - `{niche}`: User's content niche (optional)
 
 **Configuration**:
+
 - Temperature: 0.8
 - Max Output Tokens: 150
 
@@ -502,6 +557,7 @@ Generate a single, natural reply:
 ## Prompt Templates
 
 ### 1. Description Style Analysis Template
+
 **Source**: `PROMPT_STRATEGY.md`
 
 ```
@@ -545,6 +601,7 @@ Format your response as a JSON array:
 ---
 
 ### 2. Engagement Prediction Template
+
 **Source**: `PROMPT_STRATEGY.md`
 
 ```
@@ -561,11 +618,27 @@ Content Details:
 
 Analyze this content and predict:
 
-1. **Views Range**: Estimated view count (low-high range)
-2. **Engagement Rate**: Predicted % of viewers who engage (likes, comments, shares)
-3. **Subscriber Gain**: Estimated new subscribers from this video
-4. **Watch Time**: Predicted average watch time percentage
-5. **Like/Comment Ratio**: Expected ratio of likes to comments
+
+1. Performance outlook relative to the channel’s average
+   (below average / average / above average)
+
+2. Estimated engagement tendency
+   (low / medium / high compared to recent videos)
+
+3. Likely subscriber impact
+   (minimal / moderate / strong)
+
+4. Watch-time outlook
+   (lower / similar / higher than channel average)
+
+5. Like-to-comment tendency
+   (discussion-heavy / balanced / like-heavy)
+
+For each estimate:
+- Briefly explain the reasoning using observable factors
+  (title clarity, topic appeal, content style, audience fit)
+- Do NOT invent statistics or exact percentages
+- If information is insufficient, state the limitation clearly
 
 Consider:
 - Title appeal and SEO value
@@ -576,6 +649,11 @@ Consider:
 - Channel authority and size
 - Current trends alignment
 - Thumbnail potential (if applicable)
+- Overall confidence level (low / medium / high)
+- Key strengths
+- Key risks
+- 2–3 specific recommendations to improve performance
+
 
 Provide confidence level (high/medium/low) and reasoning.
 
@@ -613,15 +691,18 @@ Format as JSON:
 ---
 
 ### 3. Quick Action Templates
+
 **Source**: `PROMPT_STRATEGY.md`
 
 #### Generate Ideas Quick Template
+
 ```
 Quick: Generate 5 content ideas for {niche} niche focusing on {goal}.
 Keep titles under 60 chars, include hashtags, and engagement scores.
 ```
 
 #### Update Description Quick Template
+
 ```
 Quick: Generate optimized description for video titled "{title}" in {niche} niche.
 Include hook, value prop, timestamps if applicable, CTA, and hashtags.
@@ -629,12 +710,14 @@ Include hook, value prop, timestamps if applicable, CTA, and hashtags.
 ```
 
 #### Suggest Hashtags Quick Template
+
 ```
 Quick: Suggest 10 hashtags for a video about "{topic}" in {niche} niche.
 Mix of popular and niche-specific. Explain top 3 choices.
 ```
 
 #### Optimize Title Quick Template
+
 ```
 Quick: Suggest 3 optimized title variations for: "{currentTitle}"
 Niche: {niche}, Goal: {goal}. Include SEO keywords, keep under 60 chars.
@@ -647,15 +730,15 @@ Explain why each works.
 
 ### API Endpoints and Their Prompts
 
-| Endpoint | Prompt Type | Location | Temperature |
-|----------|-------------|----------|-------------|
-| `/api/creator/chatbot` | Conversational Assistant | `app/api/creator/chatbot/route.js` | 0.7 |
-| `/api/creator/generate-content` (description) | Description Generation | `lib/gemini-service.js` | 0.7 |
-| `/api/creator/generate-content` (titles) | Title Generation | `lib/gemini-service.js` | 0.7 |
-| `/api/creator/generate-content` (hashtags) | Hashtag Generation | `lib/gemini-service.js` | 0.7 |
-| `/api/creator/ideas` | Content Ideas | `lib/gemini-service.js` | 0.8 |
-| `/api/creator/analyze-niche-content` | Niche Analysis | `app/api/creator/analyze-niche-content/route.js` | 0.7 |
-| `/api/ai/generate-reply` | Comment Reply | `lib/gemini.js` | 0.8 |
+| Endpoint                                      | Prompt Type              | Location                                         | Temperature |
+| --------------------------------------------- | ------------------------ | ------------------------------------------------ | ----------- |
+| `/api/creator/chatbot`                        | Conversational Assistant | `app/api/creator/chatbot/route.js`               | 0.7         |
+| `/api/creator/generate-content` (description) | Description Generation   | `lib/gemini-service.js`                          | 0.7         |
+| `/api/creator/generate-content` (titles)      | Title Generation         | `lib/gemini-service.js`                          | 0.7         |
+| `/api/creator/generate-content` (hashtags)    | Hashtag Generation       | `lib/gemini-service.js`                          | 0.7         |
+| `/api/creator/ideas`                          | Content Ideas            | `lib/gemini-service.js`                          | 0.8         |
+| `/api/creator/analyze-niche-content`          | Niche Analysis           | `app/api/creator/analyze-niche-content/route.js` | 0.7         |
+| `/api/ai/generate-reply`                      | Comment Reply            | `lib/gemini.js`                                  | 0.8         |
 
 ---
 
@@ -667,21 +750,21 @@ All prompts use the following safety settings:
 safetySettings: [
   {
     category: "HARM_CATEGORY_HARASSMENT",
-    threshold: "BLOCK_MEDIUM_AND_ABOVE"
+    threshold: "BLOCK_MEDIUM_AND_ABOVE",
   },
   {
     category: "HARM_CATEGORY_HATE_SPEECH",
-    threshold: "BLOCK_MEDIUM_AND_ABOVE"
+    threshold: "BLOCK_MEDIUM_AND_ABOVE",
   },
   {
     category: "HARM_CATEGORY_SEXUALLY_EXPLICIT",
-    threshold: "BLOCK_MEDIUM_AND_ABOVE"
+    threshold: "BLOCK_MEDIUM_AND_ABOVE",
   },
   {
     category: "HARM_CATEGORY_DANGEROUS_CONTENT",
-    threshold: "BLOCK_MEDIUM_AND_ABOVE"
-  }
-]
+    threshold: "BLOCK_MEDIUM_AND_ABOVE",
+  },
+];
 ```
 
 ---
@@ -689,6 +772,7 @@ safetySettings: [
 ### Generation Configuration
 
 #### Standard Configuration
+
 ```javascript
 generationConfig: {
   temperature: 0.7,
@@ -699,6 +783,7 @@ generationConfig: {
 ```
 
 #### Ideas Generation Configuration
+
 ```javascript
 generationConfig: {
   temperature: 0.8,
@@ -709,6 +794,7 @@ generationConfig: {
 ```
 
 #### Comment Reply Configuration
+
 ```javascript
 generationConfig: {
   temperature: 0.8,
@@ -725,52 +811,57 @@ generationConfig: {
 
 All prompts that request JSON output use the following parsing logic:
 
-```javascript
+````javascript
 function parseJSONResponse(text) {
   try {
     // Try to extract JSON from markdown code blocks
-    const jsonMatch = text.match(/```json\n([\s\S]*?)\n```/) || 
-                     text.match(/```\n([\s\S]*?)\n```/) ||
-                     text.match(/\[[\s\S]*\]/) ||
-                     text.match(/\{[\s\S]*\}/);
-    
+    const jsonMatch =
+      text.match(/```json\n([\s\S]*?)\n```/) ||
+      text.match(/```\n([\s\S]*?)\n```/) ||
+      text.match(/\[[\s\S]*\]/) ||
+      text.match(/\{[\s\S]*\}/);
+
     if (jsonMatch) {
       const jsonText = jsonMatch[1] || jsonMatch[0];
       return JSON.parse(jsonText);
     }
-    
+
     // Try parsing entire text
     return JSON.parse(text);
   } catch (e) {
-    console.error('Failed to parse JSON from response:', e);
+    console.error("Failed to parse JSON from response:", e);
     return null;
   }
 }
-```
+````
 
 ---
 
 ### Prompt Refinement Patterns
 
 #### Pattern 1: Iterative Refinement
+
 ```
 User: "Make it more engaging"
 System: Regenerate with focus on engagement hooks, questions, and CTAs
 ```
 
 #### Pattern 2: Style Transfer
+
 ```
 User: "Use the Educational Hook Style"
 System: Regenerate description using that specific style template
 ```
 
 #### Pattern 3: Context Addition
+
 ```
 User: "Add more hashtags"
 System: Generate additional hashtags maintaining relevance
 ```
 
 #### Pattern 4: Tone Adjustment
+
 ```
 User: "Make it more casual"
 System: Regenerate with casual language, contractions, emojis
@@ -781,6 +872,7 @@ System: Regenerate with casual language, contractions, emojis
 ### Quality Assurance Checklist
 
 For each prompt:
+
 - ✅ Includes user context (niche, goal)
 - ✅ Requests structured output (JSON when applicable)
 - ✅ Specifies length/format constraints
@@ -794,16 +886,19 @@ For each prompt:
 ### Performance Optimization
 
 #### Token Management
+
 - Keep prompts concise but complete
 - Remove unnecessary context when possible
 - Use variables efficiently
 
 #### Response Formatting
+
 - Always request JSON for structured data
 - Provide clear examples in prompts
 - Specify field types and constraints
 
 #### Caching Strategy
+
 - Cache common queries (description styles, niche info)
 - Store user preferences
 - Reuse context across requests
@@ -813,6 +908,7 @@ For each prompt:
 ### Content Guidelines
 
 All prompts enforce:
+
 - ✅ Compliance with YouTube Community Guidelines
 - ✅ Original and authentic content
 - ✅ No copyrighted material
@@ -824,6 +920,7 @@ All prompts enforce:
 ### Metrics Tracked
 
 For continuous improvement:
+
 - Prompt success rate
 - JSON parsing success rate
 - User satisfaction with outputs
@@ -845,6 +942,7 @@ This document contains **15+ unique prompts** used across the YouTube Smart Assi
 6. **Templates**: 7 additional templates for various use cases
 
 All prompts are designed with:
+
 - Clear context and variables
 - Structured output formats
 - Appropriate temperature settings
