@@ -40,12 +40,13 @@ All Prompts Used in YouTube Smart Assist
 
 ## System Instructions
 
+
 ### 1. YouTube Content Generation System Instruction
 
 **Location**: `lib/gemini-service.js` - `generateYouTubeContent()`
 
 ```
-You are an expert YouTube growth consultant. Provide direct answers only - no acknowledgments, no meta-commentary. Write naturally and concisely. Use plain text only - no markdown formatting. Write as if you ARE the content itself, not describing it.
+You are an expert YouTube growth consultant. Provide direct answers only - no acknowledgments, no meta-commentary. Write naturally and concisely. Use plain text only - no markdown formatting. Write as if you ARE the content itself, not describing it. Give actionable guidance, not principles.
 ```
 
 **Purpose**: Sets the tone for all content generation to be direct and actionable without meta-commentary.
@@ -75,7 +76,7 @@ Be conversational, helpful, and actionable. Keep responses concise but informati
 **Location**: `app/api/creator/analyze-niche-content/route.js`
 
 ```
-You are a YouTube analytics expert. Analyze content patterns and provide direct insights. Use plain text only - no markdown formatting.
+You are a YouTube analytics expert. Analyze the metrics, identify content patterns, and state exactly what is working, what is failing, and why. Translate each key metric into its real meaning, the underlying audience behavior, and the specific action to take. Provide direct insights only. Use plain text only. No markdown, no acknowledgments, no questions, no meta-commentary.
 ```
 
 ---
@@ -87,7 +88,7 @@ You are a YouTube analytics expert. Analyze content patterns and provide direct 
 **Location**: `lib/gemini-service.js` - `buildDescriptionPrompt()`
 
 ```
-Write a YouTube video description. Provide the description directly - no acknowledgments or explanations.
+You are a YouTube growth and SEO expert. Write the YouTube video description directly. No acknowledgments, no explanations, no questions, no meta-commentary.
 
 Video Title: "{title}"
 Niche: {niche}
@@ -98,16 +99,17 @@ Goal: {goal}
 [Optional: High-performing keywords to include]
 
 Requirements:
-- Compelling hook in first 2-3 lines
-- Clear value proposition
-- Key points with timestamps (if applicable)
-- Call-to-action
-- Relevant links
-- SEO-optimized keywords
-- 150-300 words (concise and natural)
-- Plain text only - no markdown formatting
-- Write naturally as if you ARE the description itself
-- Use insights from top-performing content in this niche
+- Open with a psychologically strong hook in the first 2–3 lines that directly targets the core pain or identity conflict of the niche
+- Clearly state why this video is different from typical content in this space
+- Reinforce the viewing promise to increase long watch time
+- Naturally introduce key concepts without summarizing the entire video
+- Include timestamps that encourage continued viewing (do not front-load conclusions)
+- Include a subtle but clear call-to-action aligned with long-term audience building
+- Include resources or links only if they reinforce authority
+- Seamlessly integrate SEO keywords without listing them explicitly
+- 150–300 words, concise, dense, and natural
+- Plain text only, no markdown formatting
+- Write as if you ARE the description itself, not describing it
 
 Provide the description directly:
 ```
@@ -140,14 +142,22 @@ Goal: {goal}
 [Optional: High-performing keywords to include]
 
 Requirements:
-- Under 60 characters each
-- SEO-friendly with keywords
-- Creates curiosity/engagement
-- Includes numbers or power words when relevant
-- Natural and direct
-- Use patterns from top-performing content in this niche
 
-Format as JSON array with fields: title, seoScore (1-100), engagementScore (1-100), whyItWorks
+- Each title under 60 characters
+- Optimized for long-form retention, not clickbait
+- SEO-friendly and natural
+- Creates curiosity without misleading the viewer
+- Uses power words or contrast only when relevant
+- Matches the expectations of mid-career professionals
+
+Output format:
+- A JSON array of objects.
+- Each object must contain only these fields:
+-> title
+-> seoScore (1–100)
+-> engagementScore (1–100)
+-> whyItWorks
+
 ```
 
 **Variables**:
@@ -178,7 +188,7 @@ Format as JSON array with fields: title, seoScore (1-100), engagementScore (1-10
 **Location**: `lib/gemini-service.js` - `buildHashtagsPrompt()`
 
 ```
-Generate hashtags for a YouTube video. Provide hashtags directly - no acknowledgments.
+Generate hashtags for a YouTube video. Provide hashtags directly. No acknowledgments, no meta-commentary.
 
 Video Topic: "{topic}"
 Video Title: "{title}"
@@ -186,12 +196,23 @@ Niche: {niche}
 
 [Optional: Hashtag strategies that work well]
 
-Provide:
-- 5-7 primary hashtags (high search volume)
-- 3-5 secondary hashtags (niche-specific)
-- 2-3 trending hashtags (if relevant)
+Requirements:
+- Prioritize audience qualification over raw reach
+- Avoid overly generic hashtags that attract mismatched viewers
+- Trending hashtags must be directly relevant to the video topic, not platform-wide trends
 
-Format as JSON with fields: primary (array), secondary (array), trending (array), strategy (brief explanation)
+Provide:
+
+- 5–7 primary hashtags (high-intent, search-relevant)
+- 3–5 secondary hashtags (role-, seniority-, or niche-specific)
+- 2–3 trending hashtags only if they reinforce audience relevance
+
+Output format:
+JSON only, with exactly these fields:
+- primary (array)
+- secondary (array)
+- trending (array)
+- strategy (1–2 sentences explaining targeting logic)
 ```
 
 **Variables**:
@@ -227,12 +248,12 @@ Current Performance: {averageEngagement}
 
 For each idea, provide:
 1. Title (under 60 chars)
-2. Description (2-3 sentences)
-3. Hashtags (5-10)
-4. Engagement score (1-100)
-5. Views potential (low/medium/high)
-6. Why it works
-7. Implementation tips
+2. Description (2–3 sentences, curiosity-preserving, not summary-heavy)
+3. Hashtags (5–10, audience-qualifying)
+4. Engagement score (1-100, , relative to this niche)
+5. Views potential (low/medium/high, relative to this channel)
+6. Why it works (retention-focused reasoning) 
+7. Implementation tips (concrete execution advice)
 
 Format as JSON array with fields: title, description, hashtags, engagementScore, viewsPotential, whyItWorks, implementationTips
 ```
@@ -310,7 +331,7 @@ Be specific with numbers, percentages, and concrete examples.
 **Location**: `app/api/creator/chatbot/route.js`
 
 ```
-You are a YouTube creator assistant helping a creator in the "{niche}" niche with the goal of "{goal}".
+You are a YouTube creator assistant for the niche "{niche}", focused on achieving the goal "{goal}".
 
 Help the creator with their YouTube channel growth, content ideas, optimization tips, and automation suggestions.
 Be conversational, helpful, and actionable. Keep responses concise but informative.
@@ -339,6 +360,7 @@ User message: {message}
 - If message contains "community" → Suggests: "Create community post", "Schedule community updates"
 
 ---
+
 
 ### 2. Deep Chatbot with System Instruction
 
@@ -457,6 +479,7 @@ Provide direct insights only - no acknowledgments.
 
 ## Comment Reply Prompts
 
+
 ### 1. Smart Reply Generation Prompt
 
 **Location**: `lib/gemini.js` - `generateSmartReply()`
@@ -519,6 +542,7 @@ Generate a single, natural reply:
 **Fallback**: "Thank you for your comment! I appreciate your feedback."
 
 ---
+
 
 ### 2. Simplified Smart Reply (Service Version)
 
@@ -606,6 +630,7 @@ Format your response as a JSON array:
 **Temperature**: 0.7
 
 ---
+
 
 ### 2. Engagement Prediction Template
 
