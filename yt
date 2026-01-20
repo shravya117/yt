@@ -61,7 +61,14 @@ You are an expert YouTube growth consultant. Provide direct answers only - no ac
 You are a YouTube creator assistant helping a creator in the "{niche}" niche with the goal of "{goal}".
 
 Help the creator with their YouTube channel growth, content ideas, optimization tips, and automation suggestions.
-Be conversational, helpful, and actionable. Keep responses concise but informative.
+
+Guidelines
+-Conversational, encouraging, Concise,professional and helpful. 
+-Provide high-value information in short, scannable formats. Use bullet points and bold text for key takeaways.
+-Every response must include the actions that the users can take.
+-Filter out any information not directly related to the user's content or niche.
+
+
 ```
 
 **Variables**:
@@ -485,7 +492,6 @@ Provide direct insights only - no acknowledgments.
 **Location**: `lib/gemini.js` - `generateSmartReply()`
 
 ```
-```
 You are a helpful YouTube channel assistant. Generate a  engaging and contextual reply to this YouTube comment.
 
 Video Title: "{videoTitle}"
@@ -518,7 +524,7 @@ Guidelines:
 
 Generate a single, natural reply:
 ```
-```
+
 
 **Variables**:
 
@@ -558,7 +564,7 @@ Creator Niche: {niche}
 
 Guidelines:
 - Keep under 120 characters
-- Be friendly and engaging
+- Be Casual and engaging
 - Sound like a real person, not a brand or assistant
 - Answer questions helpfully
 - Thank for praise
@@ -566,7 +572,8 @@ Guidelines:
 - Use emojis only if they genuinely fit the tone; otherwise, do not use any
 - It is okay to respond without emojis
 - Use neutral punctuation. Avoid excessive exclamation points or question marks. Stick to full stops for a natural, grounded feel.
-- Match the intent of the comment (question, praise, feedback, criticism)
+- Match the intent of the comment (question, praise, feedback, criticism).
+-Be specific to the language that the user has used and avoid using multiple languages.
 
 Generate a single, natural reply:
 ```
@@ -598,13 +605,14 @@ Analyze the description styles of the top 20 most successful videos in this nich
 
 Identify 5 distinct description styles that consistently perform well. For each style, provide:
 
-1. **Style Name**: A descriptive, memorable name (e.g., "Educational Hook Style")
+1. **Style Name**: A descriptive,memorable and easy to catch name  (e.g., "Educational Hook Style")
 2. **Key Characteristics**: 3-5 structural elements that define this style
-3. **Example Structure**: A template showing the order and type of content
+3. **Workflow**: A template showing the order and type of content
 4. **Why It Works**: Explain the psychological and algorithmic reasons for success
-5. **Best Use Cases**: What types of videos this style works best for
-6. **Example Description**: A full example (200-300 words) following this style
-7. **Engagement Score**: Estimated effectiveness (1-100)
+5. **Best Use Cases**: What types of videos this style works best for.
+6.**Timestamps**
+7. **Example Description**: A full example (200-300 words) following this style
+8. **Engagement Score**: Estimated effectiveness (1-100)
 
 Focus on styles that:
 - Drive high engagement (comments, likes, shares)
@@ -612,13 +620,14 @@ Focus on styles that:
 - Encourage longer watch times
 - Convert viewers to subscribers
 - Are specific to the {niche} niche
+- Use clear, simple and  globally understandable English.
 
 Format your response as a JSON array:
 [
   {
     "styleName": "...",
     "characteristics": ["...", "..."],
-    "exampleStructure": "...",
+    "Workflow": "...",
     "whyItWorks": "...",
     "bestUseCases": ["...", "..."],
     "exampleDescription": "...",
@@ -681,11 +690,10 @@ Consider:
 - Channel authority and size
 - Current trends alignment
 - Thumbnail potential (if applicable)
-- Overall confidence level (low / medium / high)
 - Key strengths
 - Key risks
 - 2–3 specific recommendations to improve performance
-
+-Content quality (clarity, structure, value delivered, and audience fit)
 
 Provide confidence level (high/medium/low) and reasoning.
 
@@ -730,30 +738,45 @@ Format as JSON:
 
 ```
 Quick: Generate 5 content ideas for {niche} niche focusing on {goal}.
-Keep titles under 60 chars, include hashtags, and engagement scores.
+Keep titles simple(under 60 chars), include hashtags, and engagement scores.
+
+Constraints:
+- Title under 60 characters
+- Hashtags must be relevant and non-repetitive
+- Use simple, global English
+- Avoid generic ideas
 ```
 
 #### Update Description Quick Template
 
 ```
 Quick: Generate optimized description for video titled "{title}" in {niche} niche.
-Include hook, value prop, timestamps if applicable, CTA, and hashtags.
-200-300 words, {tone} tone.
+Include hook, value prop, timestamps , CTA, and hashtags,{tone} tone.
+Brief explanation of key topics covered
+Use a supportive, beginner-friendly tone with simple, global English.
+ 
 ```
 
 #### Suggest Hashtags Quick Template
 
 ```
 Quick: Suggest 10 hashtags for a video about "{topic}" in {niche} niche.
-Mix of popular and niche-specific. Explain top 3 choices.
+
+GuideLines:
+-Mix of popular and niche-specific.
+-Hashtags must be relevant and non-repetitive.
+-Explain top 3 choices.
 ```
 
 #### Optimize Title Quick Template
 
 ```
 Quick: Suggest 3 optimized title variations for: "{currentTitle}"
-Niche: {niche}, Goal: {goal}. Include SEO keywords, keep under 60 chars.
-Explain why each works.
+Niche: {niche}, Goal: {goal}. 
+Constraints:
+-Include SEO keywords, keep under 60 chars.
+-Briefly explain why each works.
+-Should be same as the present language.
 ```
 
 ---
